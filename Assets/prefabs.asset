@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: prefabs
   m_EditorClassIdentifier: 
   prefabDataList:
-  - prefab: {fileID: 3563903284783808944, guid: 974bd1f66661670438537db700caba89,
-      type: 3}
-    blockedCells: []
-  - prefab: {fileID: 3785986214382735008, guid: 9cd32b2d01b96e44e8a0f1269d359669,
-      type: 3}
-    blockedCells:
-    - {x: 0, y: 0, z: 1}
+  - prefabList:
+    - {fileID: 5579922109067216844, guid: 92fce776ccc9ff64a9b1ac1ce3e89894, type: 3}
+  - prefabList:
+    - {fileID: 1976167961529753357, guid: b51e7ba27026c434bb2f61119759f008, type: 3}
+  rotationList:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 90, z: 0}
+  - {x: 0, y: 180, z: 0}
+  - {x: 0, y: -90, z: 0}
