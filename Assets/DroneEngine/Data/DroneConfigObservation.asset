@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65729d161fc82794fa4ed91f27d6c905, type: 3}
+  m_Name: DroneConfigObservation
+  m_EditorClassIdentifier: 
+  pitchSpeed: 100
+  yawSpeed: 100
+  rollSpeed: 100
+  powerSpeed: 5
+  maxPower: 40
+  maxPitchAngle: 55
+  maxRollAngle: 45
+  maintainHeight: 1
+  freeDragRatio: 0.9
+  horizontalAutoStability: 5
+  easyDrive: 1
+  rollToYawRatio: -2
+  rollToPitchRatio: 0.5

@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65729d161fc82794fa4ed91f27d6c905, type: 3}
-  m_Name: DroneConfigEasyDrive
+  m_Name: DroneConfigRace
   m_EditorClassIdentifier: 
   pitchSpeed: 100
   yawSpeed: 100
-  rollSpeed: 100
+  rollSpeed: 200
   powerSpeed: 5
-  maxPower: 40
-  maxPitchAngle: 55
+  maxPower: 50
+  maxPitchAngle: 75
   maxRollAngle: 45
   maintainHeight: 1
   freeDragRatio: 0.9
-  horizontalAutoStability: 5
+  horizontalAutoStability: 1
   easyDrive: 1
   rollToYawRatio: -2
   rollToPitchRatio: 0.5
