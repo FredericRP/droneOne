@@ -13,9 +13,11 @@ public class RotationFromFlightValue : MonoBehaviour
     [SerializeField]
     float overallRatio = 90;
 
+  #region runtime vars
     Vector3 eulerAngles;
+  #endregion
 
-    private void Start()
+  private void Start()
     {
         eulerAngles = Vector3.zero;
     }

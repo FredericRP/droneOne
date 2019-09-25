@@ -1,0 +1,107 @@
+{
+    "name": "DroneControls",
+    "maps": [
+        {
+            "name": "race",
+            "id": "a8956111-5e00-4ae5-9e43-f858aa23ceaf",
+            "actions": [
+                {
+                    "name": "pitch",
+                    "type": "Value",
+                    "id": "47d815bb-dced-44ed-a145-45ecec03d890",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "power",
+                    "type": "Value",
+                    "id": "14f41c7b-efa0-480e-a71a-d8497dd5c90b",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "roll",
+                    "type": "Value",
+                    "id": "df44d9cb-600b-47e4-8c14-ea7a843e979b",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "yaw",
+                    "type": "Value",
+                    "id": "0aadf69e-4cb4-443d-b4b7-b41774721469",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1f30a7c2-93f7-46de-94b8-dfac701ac892",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "pitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6e800691-4476-480b-804a-d925d2533b7e",
+                    "path": "<Gamepad>/rightStick/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "power",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9280fc8b-ee6d-4dcb-9886-dfe86a170000",
+                    "path": "<Gamepad>/leftStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "roll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b2446905-c666-4e88-8582-9d64fde8e9ed",
+                    "path": "<Gamepad>/rightStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "yaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Race",
+            "bindingGroup": "Race",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": true,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": true,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}

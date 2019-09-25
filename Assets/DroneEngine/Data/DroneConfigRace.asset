@@ -13,15 +13,14 @@ MonoBehaviour:
   m_Name: DroneConfigRace
   m_EditorClassIdentifier: 
   pitchSpeed: 100
-  yawSpeed: 100
-  rollSpeed: 200
-  powerSpeed: 5
-  maxPower: 50
+  yawSpeed: 70
+  rollSpeed: 50
+  powerSpeed: 100
+  maxPower: 30
   maxPitchAngle: 75
-  maxRollAngle: 45
+  maxRollAngle: 15
   maintainHeight: 1
-  freeDragRatio: 0.9
   horizontalAutoStability: 1
   easyDrive: 1
-  rollToYawRatio: -2
+  rollToYawRatio: -0.5
   rollToPitchRatio: 0.5

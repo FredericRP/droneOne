@@ -15,6 +15,6 @@ public class RotationFromDirection : MonoBehaviour
         planarVelocity.y = 0;
         // To prevent weird behavior, apply rotation from direction only when moving
         if (planarVelocity.sqrMagnitude > 0)
-            transform.localRotation = Quaternion.FromToRotation(Vector3.forward, planarVelocity);   
+            transform.localRotation = Quaternion.FromToRotation(Vector3.forward, planarVelocity);
     }
 }

@@ -163,10 +163,10 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 0
+    axis: 3
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Pitch
+    m_Name: PitchCanceled
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
@@ -339,7 +339,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 1
+    axis: 4
     joyNum: 0
   - serializedVersion: 3
     m_Name: Roll
@@ -355,5 +355,21 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 3
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Pitch
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 2
     joyNum: 0
