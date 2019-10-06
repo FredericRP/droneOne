@@ -5,6 +5,8 @@ namespace FredericRP.DroneEngine
     public class RotateFromSpeed : MonoBehaviour
     {
         [SerializeField]
+        DroneController controller;
+        [SerializeField]
         Transform[] rotorList;
         [SerializeField]
         Vector3 rotorAxis = Vector3.up;
@@ -12,11 +14,11 @@ namespace FredericRP.DroneEngine
         float rotorSpeedRatio = 10;
         [SerializeField]
         float rotorSpeedOffset = 100;
-        DroneController copter;
 
         private void Start()
         {
-            copter = GetComponent<DroneController>();
+            if (controller == null)
+                controller = GetComponent<DroneController>();
         }
 
         // Update is called once per frame
@@ -24,7 +26,7 @@ namespace FredericRP.DroneEngine
         {
             for (int i = 0; i < rotorList.Length; i++)
             {
-                rotorList[i].Rotate(rotorAxis, (copter.RotorSpeed + rotorSpeedOffset) * rotorSpeedRatio * Time.deltaTime);
+                rotorList[i].Rotate(rotorAxis, (controller.RotorSpeed + rotorSpeedOffset) * rotorSpeedRatio * Time.deltaTime);
             }
         }
     }

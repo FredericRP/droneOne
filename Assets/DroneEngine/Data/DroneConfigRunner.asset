@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pitchSpeed: 100
   yawSpeed: 0
-  rollSpeed: 200
-  powerSpeed: 50
-  maxPower: 25
+  rollSpeed: 500
+  powerSpeed: 150
+  maxPower: 55
   maxPitchAngle: 75
-  maxRollAngle: 35
+  maxRollAngle: 65
   maintainHeight: 1
   horizontalAutoStability: 2
   easyDrive: 0
