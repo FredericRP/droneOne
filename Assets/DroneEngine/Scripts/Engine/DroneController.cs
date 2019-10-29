@@ -71,24 +71,46 @@ namespace FredericRP.DroneEngine
       // Z axis : Roll (roulis)
       targetAngle.z += flightValue.roll * Time.deltaTime * droneConfiguration.rollSpeed;
       // Power
-      verticalForce = Mathf.Lerp(verticalForce, Mathf.Clamp01(flightValue.power) * droneConfiguration.maxPower, Time.deltaTime * droneConfiguration.powerSpeed);
+      // Add 1 to be in the [0,2] interval instead of [-1,1]
+      //verticalForce = Mathf.Lerp(verticalForce, ((flightValue.power+1) * (droneConfiguration.maxPower - droneConfiguration.minPower)) + droneConfiguration.minPower, Time.deltaTime * droneConfiguration.powerSpeed);
+      verticalForce = Mathf.Lerp(verticalForce, ((flightValue.power+1)/2 * (droneConfiguration.maxPower - droneConfiguration.minPower)) + droneConfiguration.minPower, Time.deltaTime * droneConfiguration.powerSpeed);
 
       // LIMITS
-      if (droneConfiguration.maxPitchAngle != 0)
+      // Pitch
+      if (droneConfiguration.pitchClamp.clamp)
       {
         while (targetAngle.x >= 180)
           targetAngle.x -= 360;
         while (targetAngle.x <= -180)
           targetAngle.x += 360;
-        targetAngle.x = Mathf.Clamp(targetAngle.x, -droneConfiguration.maxPitchAngle, droneConfiguration.maxPitchAngle);
+        targetAngle.x = Mathf.Clamp(targetAngle.x, droneConfiguration.pitchClamp.min, droneConfiguration.pitchClamp.max);
       }
-      if (droneConfiguration.maxRollAngle != 0)
+      // Yaw
+      if (droneConfiguration.yawClamp.clamp)
+      {
+        while (targetAngle.y >= 180)
+          targetAngle.y -= 360;
+        while (targetAngle.y <= -180)
+          targetAngle.y += 360;
+        targetAngle.y = Mathf.Clamp(targetAngle.y, droneConfiguration.yawClamp.min, droneConfiguration.yawClamp.max);
+      }
+      // Roll
+      if (droneConfiguration.rollClamp.clamp)
       {
         while (targetAngle.z >= 180)
           targetAngle.z -= 360;
         while (targetAngle.z <= -180)
           targetAngle.z += 360;
-        targetAngle.z = Mathf.Clamp(targetAngle.z, -droneConfiguration.maxRollAngle, droneConfiguration.maxRollAngle);
+        targetAngle.z = Mathf.Clamp(targetAngle.z, droneConfiguration.rollClamp.min, droneConfiguration.rollClamp.max);
+      }
+
+      // Specific pitch angle to compensate power change (runner config, should be moved aside - cf subcontrollers)
+      if (droneConfiguration.pitchPowerPositiveImpact != 0 && flightValue.power > 0)
+      {
+        targetAngle.x += flightValue.power * droneConfiguration.pitchPowerPositiveImpact;
+      } else if (droneConfiguration.pitchPowerNegativeImpact != 0 && flightValue.power < 0)
+      {
+        targetAngle.x += flightValue.power * droneConfiguration.pitchPowerNegativeImpact;
       }
 
       // AUTO PILOT
@@ -101,8 +123,6 @@ namespace FredericRP.DroneEngine
       if (flightValue.pitch == 0)
       {
         targetAngle.x = Mathf.Lerp(targetAngle.x, 0, droneConfiguration.horizontalAutoStability * Time.deltaTime);
-        //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, transform.eulerAngles.y, 0),
-            //droneConfiguration.horizontalAutoStability * Time.deltaTime);
       }
       // set to limits if any
       transform.localEulerAngles = targetAngle;

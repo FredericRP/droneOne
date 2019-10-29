@@ -7,7 +7,7 @@
             "actions": [
                 {
                     "name": "pitch",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "47d815bb-dced-44ed-a145-45ecec03d890",
                     "expectedControlType": "Double",
                     "processors": "",
@@ -15,7 +15,7 @@
                 },
                 {
                     "name": "power",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "14f41c7b-efa0-480e-a71a-d8497dd5c90b",
                     "expectedControlType": "Double",
                     "processors": "",
@@ -23,7 +23,7 @@
                 },
                 {
                     "name": "roll",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "df44d9cb-600b-47e4-8c14-ea7a843e979b",
                     "expectedControlType": "Double",
                     "processors": "",
@@ -31,7 +31,7 @@
                 },
                 {
                     "name": "yaw",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "0aadf69e-4cb4-443d-b4b7-b41774721469",
                     "expectedControlType": "Double",
                     "processors": "",
@@ -69,17 +69,6 @@
                     "processors": "",
                     "groups": "Race",
                     "action": "roll",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b2446905-c666-4e88-8582-9d64fde8e9ed",
-                    "path": "<Gamepad>/rightStick/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Race",
-                    "action": "yaw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

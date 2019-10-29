@@ -1,11 +1,14 @@
-﻿using System.Collections;
+﻿using FredericRP.ObjectPooling;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawn : MonoBehaviour
 {
   [SerializeField]
-  GameObject[] prefabList;
+  string poolId = "pool";
+  [SerializeField]
+  string[] prefabNameList;
   [SerializeField]
   Vector3 prefabSize;
   [SerializeField]
@@ -26,10 +29,10 @@ public class Spawn : MonoBehaviour
 
   public void SpawnPrefab()
   {
-    GameObject go = Instantiate(prefabList[index++], parent);
+    GameObject go = ObjectPool.GetObjectPool(poolId).GetFromPool(prefabNameList[index++]);
     go.transform.localPosition = offset;
     offset += prefabSize;
-    if (index >= prefabList.Length)
+    if (index >= prefabNameList.Length)
       index = 0;
   }
 }

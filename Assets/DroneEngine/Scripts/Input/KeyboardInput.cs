@@ -10,34 +10,19 @@ namespace FredericRP.DroneEngine
 
     public void OnPitch(InputAction.CallbackContext context)
     {
-      flightValue.pitch = (float)context.action.ReadValue<double>();
+      flightValue.pitch = context.action.ReadValue<float>();
     }
-
-    public void OnTruc()
+    public void OnPower(InputAction.CallbackContext context)
     {
-
+      flightValue.power = context.action.ReadValue<float>();
     }
-
-    // Update is called once per frame
-    void Update()
+    public void OnRoll(InputAction.CallbackContext context)
     {
-      // Left joystick / keys : roll(H) + pitch(V)
-
-      // Right joystick / keys : yaw(H) + power(V)
-
-      // Roll (roulis)
-      float roll = Input.GetAxis("Roll");
-      // TODO : allow to invert axis in options
-      flightValue.roll = -roll;
-      // Pitch (tangage)
-      float pitch = Input.GetAxis("Pitch");
-      flightValue.pitch = pitch;
-      // Yaw (lacet)
-      float yaw = Input.GetAxis("Yaw");
-      flightValue.yaw = yaw;
-
-      // Power
-      flightValue.power = Input.GetAxis("Power");
+      flightValue.roll = -context.action.ReadValue<float>();
+    }
+    public void OnYaw(InputAction.CallbackContext context)
+    {
+      flightValue.yaw = context.action.ReadValue<float>();
     }
   }
 }

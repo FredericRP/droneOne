@@ -25,9 +25,9 @@ public class RotationFromFlightValue : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float x = value.pitch * xMultiplier.pitch + value.yaw * xMultiplier.yaw + value.roll * xMultiplier.roll;
-        float y = value.pitch * yMultiplier.pitch + value.yaw * yMultiplier.yaw + value.roll * yMultiplier.roll;
-        float z = value.pitch * zMultiplier.pitch + value.yaw * zMultiplier.yaw + value.roll * zMultiplier.roll;
+        float x = value.power * xMultiplier.power + value.pitch * xMultiplier.pitch + value.yaw * xMultiplier.yaw + value.roll * xMultiplier.roll;
+        float y = value.power * yMultiplier.power + value.pitch * yMultiplier.pitch + value.yaw * yMultiplier.yaw + value.roll * yMultiplier.roll;
+        float z = value.power * zMultiplier.power + value.pitch * zMultiplier.pitch + value.yaw * zMultiplier.yaw + value.roll * zMultiplier.roll;
         eulerAngles.Set(x, y, z);
         transform.localEulerAngles = eulerAngles * overallRatio;
     }

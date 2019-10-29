@@ -12,13 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65729d161fc82794fa4ed91f27d6c905, type: 3}
   m_Name: DroneConfigRunner
   m_EditorClassIdentifier: 
-  pitchSpeed: 100
+  pitchSpeed: 500
   yawSpeed: 0
-  rollSpeed: 500
+  rollSpeed: 1000
   powerSpeed: 150
-  maxPower: 55
-  maxPitchAngle: 75
-  maxRollAngle: 65
+  maxPower: 110
+  minPower: 15
+  pitchPowerPositiveImpact: 0
+  pitchPowerNegativeImpact: -90
+  pitchClamp:
+    clamp: 1
+    min: 25
+    max: 75
+  yawClamp:
+    clamp: 1
+    min: 0
+    max: 0
+  rollClamp:
+    clamp: 1
+    min: -50
+    max: 50
   maintainHeight: 1
   horizontalAutoStability: 2
   easyDrive: 0
