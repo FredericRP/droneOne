@@ -73,6 +73,90 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "classic",
+            "id": "e12526d3-3fd4-4165-a842-aa8d973b1d91",
+            "actions": [
+                {
+                    "name": "pitch",
+                    "type": "PassThrough",
+                    "id": "ab869dbb-72b2-4f48-a58e-8b49bd2a61a2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "yaw",
+                    "type": "PassThrough",
+                    "id": "619e7d25-15db-4f0b-be90-56f7aabf4cbe",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "roll",
+                    "type": "PassThrough",
+                    "id": "a0cd3aeb-f778-4dc0-99f5-aff141e7735b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "power",
+                    "type": "PassThrough",
+                    "id": "2bebb64c-b765-4a24-ae1a-4ca042b27ba9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f605e1af-7bba-4276-8e04-eebaafe5baa0",
+                    "path": "<Gamepad>/rightStick/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "pitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b19b4b1d-9a86-445c-82a2-804517fad81e",
+                    "path": "<Gamepad>/rightStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "yaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1277aeeb-8c07-4be0-bb93-2893103a85a2",
+                    "path": "<Gamepad>/leftStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "roll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4cee1aeb-671f-425c-9d11-7840cb7afdfa",
+                    "path": "<Gamepad>/leftStick/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "power",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

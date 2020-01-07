@@ -87,6 +87,90 @@ namespace FredericRP.DroneEngine
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""classic"",
+            ""id"": ""e12526d3-3fd4-4165-a842-aa8d973b1d91"",
+            ""actions"": [
+                {
+                    ""name"": ""pitch"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ab869dbb-72b2-4f48-a58e-8b49bd2a61a2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""yaw"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""619e7d25-15db-4f0b-be90-56f7aabf4cbe"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""roll"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""a0cd3aeb-f778-4dc0-99f5-aff141e7735b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""power"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""2bebb64c-b765-4a24-ae1a-4ca042b27ba9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f605e1af-7bba-4276-8e04-eebaafe5baa0"",
+                    ""path"": ""<Gamepad>/rightStick/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Race"",
+                    ""action"": ""pitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b19b4b1d-9a86-445c-82a2-804517fad81e"",
+                    ""path"": ""<Gamepad>/rightStick/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Race"",
+                    ""action"": ""yaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1277aeeb-8c07-4be0-bb93-2893103a85a2"",
+                    ""path"": ""<Gamepad>/leftStick/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Race"",
+                    ""action"": ""roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4cee1aeb-671f-425c-9d11-7840cb7afdfa"",
+                    ""path"": ""<Gamepad>/leftStick/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Race"",
+                    ""action"": ""power"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -114,6 +198,12 @@ namespace FredericRP.DroneEngine
             m_race_power = m_race.FindAction("power", throwIfNotFound: true);
             m_race_roll = m_race.FindAction("roll", throwIfNotFound: true);
             m_race_yaw = m_race.FindAction("yaw", throwIfNotFound: true);
+            // classic
+            m_classic = asset.FindActionMap("classic", throwIfNotFound: true);
+            m_classic_pitch = m_classic.FindAction("pitch", throwIfNotFound: true);
+            m_classic_yaw = m_classic.FindAction("yaw", throwIfNotFound: true);
+            m_classic_roll = m_classic.FindAction("roll", throwIfNotFound: true);
+            m_classic_power = m_classic.FindAction("power", throwIfNotFound: true);
         }
 
         ~DroneControls()
@@ -216,6 +306,63 @@ namespace FredericRP.DroneEngine
             }
         }
         public RaceActions @race => new RaceActions(this);
+
+        // classic
+        private readonly InputActionMap m_classic;
+        private IClassicActions m_ClassicActionsCallbackInterface;
+        private readonly InputAction m_classic_pitch;
+        private readonly InputAction m_classic_yaw;
+        private readonly InputAction m_classic_roll;
+        private readonly InputAction m_classic_power;
+        public struct ClassicActions
+        {
+            private DroneControls m_Wrapper;
+            public ClassicActions(DroneControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @pitch => m_Wrapper.m_classic_pitch;
+            public InputAction @yaw => m_Wrapper.m_classic_yaw;
+            public InputAction @roll => m_Wrapper.m_classic_roll;
+            public InputAction @power => m_Wrapper.m_classic_power;
+            public InputActionMap Get() { return m_Wrapper.m_classic; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ClassicActions set) { return set.Get(); }
+            public void SetCallbacks(IClassicActions instance)
+            {
+                if (m_Wrapper.m_ClassicActionsCallbackInterface != null)
+                {
+                    pitch.started -= m_Wrapper.m_ClassicActionsCallbackInterface.OnPitch;
+                    pitch.performed -= m_Wrapper.m_ClassicActionsCallbackInterface.OnPitch;
+                    pitch.canceled -= m_Wrapper.m_ClassicActionsCallbackInterface.OnPitch;
+                    yaw.started -= m_Wrapper.m_ClassicActionsCallbackInterface.OnYaw;
+                    yaw.performed -= m_Wrapper.m_ClassicActionsCallbackInterface.OnYaw;
+                    yaw.canceled -= m_Wrapper.m_ClassicActionsCallbackInterface.OnYaw;
+                    roll.started -= m_Wrapper.m_ClassicActionsCallbackInterface.OnRoll;
+                    roll.performed -= m_Wrapper.m_ClassicActionsCallbackInterface.OnRoll;
+                    roll.canceled -= m_Wrapper.m_ClassicActionsCallbackInterface.OnRoll;
+                    power.started -= m_Wrapper.m_ClassicActionsCallbackInterface.OnPower;
+                    power.performed -= m_Wrapper.m_ClassicActionsCallbackInterface.OnPower;
+                    power.canceled -= m_Wrapper.m_ClassicActionsCallbackInterface.OnPower;
+                }
+                m_Wrapper.m_ClassicActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    pitch.started += instance.OnPitch;
+                    pitch.performed += instance.OnPitch;
+                    pitch.canceled += instance.OnPitch;
+                    yaw.started += instance.OnYaw;
+                    yaw.performed += instance.OnYaw;
+                    yaw.canceled += instance.OnYaw;
+                    roll.started += instance.OnRoll;
+                    roll.performed += instance.OnRoll;
+                    roll.canceled += instance.OnRoll;
+                    power.started += instance.OnPower;
+                    power.performed += instance.OnPower;
+                    power.canceled += instance.OnPower;
+                }
+            }
+        }
+        public ClassicActions @classic => new ClassicActions(this);
         private int m_RaceSchemeIndex = -1;
         public InputControlScheme RaceScheme
         {
@@ -231,6 +378,13 @@ namespace FredericRP.DroneEngine
             void OnPower(InputAction.CallbackContext context);
             void OnRoll(InputAction.CallbackContext context);
             void OnYaw(InputAction.CallbackContext context);
+        }
+        public interface IClassicActions
+        {
+            void OnPitch(InputAction.CallbackContext context);
+            void OnYaw(InputAction.CallbackContext context);
+            void OnRoll(InputAction.CallbackContext context);
+            void OnPower(InputAction.CallbackContext context);
         }
     }
 }

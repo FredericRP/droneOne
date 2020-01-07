@@ -17,11 +17,23 @@ MonoBehaviour:
   rollSpeed: 100
   powerSpeed: 5
   maxPower: 40
-  maxPitchAngle: 55
-  maxRollAngle: 45
+  minPower: 0
+  pitchPowerPositiveImpact: 0
+  pitchPowerNegativeImpact: 0
+  pitchClamp:
+    clamp: 1
+    min: -75
+    max: 75
+  yawClamp:
+    clamp: 0
+    min: -45
+    max: 45
+  rollClamp:
+    clamp: 1
+    min: -45
+    max: 45
   maintainHeight: 1
-  freeDragRatio: 0.9
   horizontalAutoStability: 5
-  easyDrive: 1
+  easyDrive: 0
   rollToYawRatio: -2
   rollToPitchRatio: 0.5
