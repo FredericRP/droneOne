@@ -1,0 +1,74 @@
+# Build WebGL du projet Unity via GameCI, captures d'écran automatiques
+# et publication de la version jouable sur GitHub Pages.
+# Secrets requis : UNITY_LICENSE (contenu du fichier .ulf), UNITY_EMAIL, UNITY_PASSWORD.
+name: WebGL
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths: [Assets/**, Packages/**, ProjectSettings/**, .github/**]
+
+concurrency:
+  group: webgl-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Version la plus proche disponible chez GameCI (le projet est en 2019.3.0b6).
+  UNITY_VERSION: 2019.3.0f1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-WebGL-${{ env.UNITY_VERSION }}-${{ hashFiles('Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: Library-WebGL-${{ env.UNITY_VERSION }}-
+
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          targetPlatform: WebGL
+          buildName: web
+          allowDirtyBuild: true
+
+      - name: Captures d'écran
+        run: |
+          sudo chown -R "$USER" build
+          npm install --no-save --no-package-lock playwright@1.48.2
+          npx playwright install --with-deps chromium
+          node .github/scripts/captures.mjs build/WebGL/web captures
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: captures
+          path: captures
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/WebGL/web
+
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
