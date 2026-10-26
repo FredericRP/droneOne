@@ -9,9 +9,10 @@ const [root, out] = process.argv.slice(2);
 const types = { '.html': 'text/html', '.js': 'application/javascript', '.json': 'application/json', '.wasm': 'application/wasm', '.png': 'image/png', '.css': 'text/css' };
 
 const server = createServer(async (req, res) => {
-  const path = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  let path = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  if (path.endsWith('/')) path += 'index.html';
   try {
-    const body = await readFile(join(root, path.endsWith('/') ? path + 'index.html' : path));
+    const body = await readFile(join(root, path));
     res.writeHead(200, { 'Content-Type': types[extname(path)] ?? 'application/octet-stream' });
     res.end(body);
   } catch {
