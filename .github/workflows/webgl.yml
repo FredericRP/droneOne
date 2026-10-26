@@ -8,6 +8,8 @@ on:
   push:
     branches: [master]
     paths: [Assets/**, Packages/**, ProjectSettings/**, .github/**]
+  pull_request:
+    paths: [Assets/**, Packages/**, ProjectSettings/**, .github/**]
 
 concurrency:
   group: webgl-${{ github.ref }}
@@ -55,7 +57,8 @@ jobs:
           name: captures
           path: captures
 
-      - uses: actions/upload-pages-artifact@v3
+      - if: github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: build/WebGL/web
 
