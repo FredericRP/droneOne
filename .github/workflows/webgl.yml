@@ -1,6 +1,6 @@
-# Build WebGL du projet Unity via GameCI, captures d'écran automatiques
-# et publication de la version jouable sur GitHub Pages.
-# Secrets requis : UNITY_LICENSE (contenu du fichier .ulf), UNITY_EMAIL, UNITY_PASSWORD.
+# WebGL build of the Unity project with GameCI, automatic screenshots
+# and publication of the playable build on GitHub Pages.
+# Required secrets: UNITY_LICENSE (content of the .ulf file), UNITY_EMAIL, UNITY_PASSWORD.
 name: WebGL
 
 on:
@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Version la plus proche disponible chez GameCI (le projet est en 2019.3.0b6).
+  # Closest version available on GameCI (the project uses 2019.3.0b6).
   UNITY_VERSION: 2019.3.0f1
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
           buildName: web
           allowDirtyBuild: true
 
-      - name: Captures d'écran
+      - name: Screenshots
         run: |
           sudo chown -R "$USER" build
           npm install --no-save --no-package-lock playwright@1.48.2
