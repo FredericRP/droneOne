@@ -109,6 +109,14 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "hook",
+                    "type": "Button",
+                    "id": "1e76bbec-db4d-40d9-9846-6ac3277b26d1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -153,6 +161,17 @@
                     "processors": "",
                     "groups": "Race",
                     "action": "power",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a27b501-e62c-402f-bbf2-a88492d7b944",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Race",
+                    "action": "hook",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

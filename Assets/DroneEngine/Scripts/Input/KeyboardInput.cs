@@ -7,7 +7,7 @@ namespace FredericRP.DroneEngine
   {
     [SerializeField]
     FlightValue flightValue;
-
+    
     public void OnPitch(InputAction.CallbackContext context)
     {
       flightValue.pitch = context.action.ReadValue<float>();
