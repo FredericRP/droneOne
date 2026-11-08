@@ -36,18 +36,22 @@ const padScript = () => {
       pad.timestamp = performance.now();
     },
   };
-  navigator.getGamepads = () => [pad, null, null, null];
+  // Count the polls to check in the log that the game reads the pad.
+  window.padPolls = 0;
+  navigator.getGamepads = () => { window.padPolls++; return [pad, null, null, null]; };
   // Keep the WebGL frame readable after presentation, so the autopilot can sample it.
   const getContext = HTMLCanvasElement.prototype.getContext;
   HTMLCanvasElement.prototype.getContext = function (type, attributes) {
     if (type === 'webgl' || type === 'webgl2') attributes = { ...attributes, preserveDrawingBuffer: true };
     return getContext.call(this, type, attributes);
   };
-  window.addEventListener('load', () => {
+  // The game registers its listeners late (after the wasm start), so announce the pad again later.
+  window.announcePad = () => {
     const event = new Event('gamepadconnected');
     event.gamepad = pad;
     window.dispatchEvent(event);
-  });
+  };
+  window.addEventListener('load', window.announcePad);
 
   // Reads the last frame at low resolution and steers towards the centroid of the yellow pixels.
   let timer = null;
@@ -107,14 +111,14 @@ await shot('02-menu', 15000);
 // Start the game: click the Play button area, then Enter and the pad A button.
 await canvas.click();
 await page.keyboard.press('Enter');
-await page.evaluate(() => window.pad.set({ buttons: { 0: 1 } }));
+await page.evaluate(() => { window.announcePad(); window.pad.set({ buttons: { 0: 1 } }); });
 await page.waitForTimeout(300);
 await page.evaluate(() => window.pad.set({ buttons: { 0: 0 } }));
 await shot('03-game', 8000);
 
-await page.evaluate(() => window.autopilot(true));
+await page.evaluate(() => { window.announcePad(); window.autopilot(true); });
 for (let i = 4; i <= 10; i++) await shot(`${String(i).padStart(2, '0')}-flight`, 5000);
-console.log('autopilot', JSON.stringify(await page.evaluate(() => window.autopilotStats)));
+console.log('autopilot', JSON.stringify(await page.evaluate(() => ({ ...window.autopilotStats, padPolls: window.padPolls }))));
 
 await browser.close();
 server.close();
