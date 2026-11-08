@@ -64,22 +64,26 @@ const padScript = () => {
       ctx.drawImage(source, 0, 0, probe.width, probe.height);
       const { data } = ctx.getImageData(0, 0, probe.width, probe.height);
       let sx = 0, sy = 0, n = 0;
-      // Skip the top and bottom bands where the HUD lives.
-      for (let y = 8; y < probe.height - 6; y++) {
+      // Only the upper half below the HUD: the drone and its yellow exhaust fill the lower half.
+      for (let y = 6; y < probe.height / 2; y++) {
         for (let x = 0; x < probe.width; x++) {
           const i = (y * probe.width + x) * 4;
-          if (data[i] > 170 && data[i + 1] > 150 && data[i + 2] < 100 && data[i] - data[i + 2] > 100) { sx += x; sy += y; n++; }
+          const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+          // Saturated yellow orbs, not the hazy yellowish cliffs nor the orange ground.
+          if (r > 200 && g > 180 && b < 110 && r - b > 120 && g - b > 100) { sx += x; sy += y; n++; }
         }
       }
       window.autopilotStats.frames++;
       window.autopilotStats.brightness = Math.round(data.reduce((sum, v, i) => (i % 4 === 3 ? sum : sum + v), 0) / (data.length * 0.75));
-      let steerX = Math.sin(performance.now() / 1500) * 0.4, steerY = 0;
+      // Without a target, weave and climb a little (the orbs float above the ground).
+      let steerX = Math.sin(performance.now() / 1500) * 0.4, steerY = 0.3;
       if (n > 0) {
         window.autopilotStats.seen++;
         steerX = Math.max(-1, Math.min(1, (sx / n / probe.width - 0.5) * 3));
-        steerY = Math.max(-1, Math.min(1, (0.5 - sy / n / probe.height) * 3));
+        steerY = Math.max(-1, Math.min(1, (0.42 - sy / n / probe.height) * 4));
       }
-      window.pad.set({ axes: [steerX, 0, 0, steerY], buttons: { 7: 1 } });
+      // Browsers report stick up as -1 (Unity inverts it back), hence -steerY.
+      window.pad.set({ axes: [steerX, 0, 0, -steerY], buttons: { 7: 1 } });
     }, 100);
   };
 };
