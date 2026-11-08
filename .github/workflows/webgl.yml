@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Closest version available on GameCI (the project uses 2019.3.0b6).
-  UNITY_VERSION: 2019.3.0f1
+  # Must match ProjectSettings/ProjectVersion.txt (GameCI image unityci/editor:ubuntu-<version>-webgl-3).
+  UNITY_VERSION: 2023.2.8f1
 
 jobs:
   build:
@@ -33,6 +33,9 @@ jobs:
           path: Library
           key: Library-WebGL-${{ env.UNITY_VERSION }}-${{ hashFiles('Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
           restore-keys: Library-WebGL-${{ env.UNITY_VERSION }}-
+
+      - name: CI WebGL settings
+        run: mkdir -p Assets/Editor && cp .github/webgl/CIWebGLSettings.cs Assets/Editor/
 
       - uses: game-ci/unity-builder@v4
         env:

@@ -1,4 +1,5 @@
 // Runs the WebGL build in headless Chromium (software rendering) and takes screenshots.
+// The drone is flown with a virtual Xbox 360 pad steering towards the yellow orbs.
 // Usage: node captures.mjs <build folder> <output folder>
 import { chromium } from 'playwright';
 import { createServer } from 'node:http';
@@ -20,10 +21,67 @@ const server = createServer(async (req, res) => {
   }
 }).listen(8080);
 
+// Virtual gamepad (standard mapping): axes = [left x, left y, right x, right y], button 7 = right trigger.
+// window.pad.set({ axes, buttons }) updates it; window.autopilot(true) steers towards yellow pixels.
+const padScript = () => {
+  const pad = {
+    id: 'Xbox 360 Controller (XInput STANDARD GAMEPAD)', index: 0, connected: true, mapping: 'standard',
+    axes: [0, 0, 0, 0], buttons: Array.from({ length: 17 }, () => ({ pressed: false, touched: false, value: 0 })),
+    timestamp: performance.now(),
+  };
+  window.pad = {
+    set({ axes, buttons = {} }) {
+      if (axes) pad.axes = axes.slice();
+      pad.buttons = pad.buttons.map((b, i) => (i in buttons ? { pressed: buttons[i] > 0.1, touched: buttons[i] > 0, value: buttons[i] } : b));
+      pad.timestamp = performance.now();
+    },
+  };
+  navigator.getGamepads = () => [pad, null, null, null];
+  window.addEventListener('load', () => {
+    const event = new Event('gamepadconnected');
+    event.gamepad = pad;
+    window.dispatchEvent(event);
+  });
+
+  // Reads the last frame at low resolution and steers towards the centroid of the yellow pixels.
+  let timer = null;
+  window.autopilotStats = { frames: 0, seen: 0 };
+  window.autopilot = (on) => {
+    clearInterval(timer);
+    if (!on) return;
+    const probe = document.createElement('canvas');
+    probe.width = 96;
+    probe.height = 60;
+    const ctx = probe.getContext('2d', { willReadFrequently: true });
+    timer = setInterval(() => {
+      const source = document.querySelector('canvas');
+      ctx.drawImage(source, 0, 0, probe.width, probe.height);
+      const { data } = ctx.getImageData(0, 0, probe.width, probe.height);
+      let sx = 0, sy = 0, n = 0;
+      // Skip the top and bottom bands where the HUD lives.
+      for (let y = 8; y < probe.height - 6; y++) {
+        for (let x = 0; x < probe.width; x++) {
+          const i = (y * probe.width + x) * 4;
+          if (data[i] > 170 && data[i + 1] > 150 && data[i + 2] < 100 && data[i] - data[i + 2] > 100) { sx += x; sy += y; n++; }
+        }
+      }
+      window.autopilotStats.frames++;
+      let steerX = Math.sin(performance.now() / 1500) * 0.4, steerY = 0;
+      if (n > 0) {
+        window.autopilotStats.seen++;
+        steerX = Math.max(-1, Math.min(1, (sx / n / probe.width - 0.5) * 3));
+        steerY = Math.max(-1, Math.min(1, (0.5 - sy / n / probe.height) * 3));
+      }
+      window.pad.set({ axes: [steerX, 0, 0, steerY], buttons: { 7: 1 } });
+    }, 100);
+  };
+};
+
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const page = await browser.newPage({ viewport: { width: 960, height: 600 } });
 page.on('console', (m) => console.log('[game]', m.text()));
+await page.addInitScript(padScript);
 await page.goto('http://localhost:8080/');
 
 const canvas = page.locator('canvas').first();
@@ -35,15 +93,17 @@ const shot = async (name, wait) => {
 
 await shot('01-startup', 20000);
 await shot('02-menu', 15000);
-// A few generic inputs (click, Enter, Space, up arrow), to adapt to the project.
+// Start the game: click the Play button area, then Enter and the pad A button.
 await canvas.click();
-for (const key of ['Enter', 'Space']) await page.keyboard.press(key);
+await page.keyboard.press('Enter');
+await page.evaluate(() => window.pad.set({ buttons: { 0: 1 } }));
+await page.waitForTimeout(300);
+await page.evaluate(() => window.pad.set({ buttons: { 0: 0 } }));
 await shot('03-game', 8000);
-await canvas.click({ position: { x: 300, y: 250 } });
-await page.keyboard.down('ArrowUp');
-await shot('04-action', 4000);
-await page.keyboard.up('ArrowUp');
-await shot('05-action', 4000);
+
+await page.evaluate(() => window.autopilot(true));
+for (let i = 4; i <= 10; i++) await shot(`${String(i).padStart(2, '0')}-flight`, 5000);
+console.log('autopilot', JSON.stringify(await page.evaluate(() => window.autopilotStats)));
 
 await browser.close();
 server.close();
