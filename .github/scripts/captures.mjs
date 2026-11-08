@@ -68,9 +68,10 @@ const padScript = () => {
       ctx.drawImage(source, 0, 0, probe.width, probe.height);
       const { data } = ctx.getImageData(0, 0, probe.width, probe.height);
       let sx = 0, sy = 0, n = 0;
-      // Only the upper half below the HUD: the drone and its yellow exhaust fill the lower half.
-      for (let y = 6; y < probe.height / 2; y++) {
+      // Skip the HUD bands and the drone with its yellow exhaust (lower centre).
+      for (let y = 6; y < probe.height - 8; y++) {
         for (let x = 0; x < probe.width; x++) {
+          if (y > probe.height * 0.4 && x > probe.width * 0.3 && x < probe.width * 0.7) continue;
           const i = (y * probe.width + x) * 4;
           const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
           // Saturated yellow orbs, not the hazy yellowish cliffs nor the orange ground.
