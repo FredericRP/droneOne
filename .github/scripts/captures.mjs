@@ -37,6 +37,12 @@ const padScript = () => {
     },
   };
   navigator.getGamepads = () => [pad, null, null, null];
+  // Keep the WebGL frame readable after presentation, so the autopilot can sample it.
+  const getContext = HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.getContext = function (type, attributes) {
+    if (type === 'webgl' || type === 'webgl2') attributes = { ...attributes, preserveDrawingBuffer: true };
+    return getContext.call(this, type, attributes);
+  };
   window.addEventListener('load', () => {
     const event = new Event('gamepadconnected');
     event.gamepad = pad;
@@ -66,6 +72,7 @@ const padScript = () => {
         }
       }
       window.autopilotStats.frames++;
+      window.autopilotStats.brightness = Math.round(data.reduce((sum, v, i) => (i % 4 === 3 ? sum : sum + v), 0) / (data.length * 0.75));
       let steerX = Math.sin(performance.now() / 1500) * 0.4, steerY = 0;
       if (n > 0) {
         window.autopilotStats.seen++;
