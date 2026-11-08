@@ -72,5 +72,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-.vsconfig
 UserSettings
+.vsconfig
