@@ -44,25 +44,25 @@ class VertexTool : EditorTool
     // OnEnable/Disable should be used to load and unload resources
     void OnEnable()
     {
-        EditorTools.activeToolChanging += OnActiveToolWillChange;
-        EditorTools.activeToolChanged += OnActiveToolDidChange;
+        ToolManager.activeToolChanging += OnActiveToolWillChange;
+        ToolManager.activeToolChanged += OnActiveToolDidChange;
     }
 
     void OnDisable()
     {
-        EditorTools.activeToolChanging -= OnActiveToolWillChange;
-        EditorTools.activeToolChanged -= OnActiveToolDidChange;
+        ToolManager.activeToolChanging -= OnActiveToolWillChange;
+        ToolManager.activeToolChanged -= OnActiveToolDidChange;
     }
 
     void OnActiveToolWillChange()
     {
-        if (EditorTools.IsActiveTool(this))
+        if (ToolManager.IsActiveTool(this))
             OnDeactivate();
     }
 
     void OnActiveToolDidChange()
     {
-        if (EditorTools.IsActiveTool(this))
+        if (ToolManager.IsActiveTool(this))
         {
             Debug.Log("Activating SomeTool");
             OnActivate();

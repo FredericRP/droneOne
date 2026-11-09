@@ -1,6 +1,6 @@
-# Build WebGL du projet Unity via GameCI, captures d'écran automatiques
-# et publication de la version jouable sur GitHub Pages.
-# Secrets requis : UNITY_LICENSE (contenu du fichier .ulf), UNITY_EMAIL, UNITY_PASSWORD.
+# WebGL build of the Unity project with GameCI, automatic screenshots
+# and publication of the playable build on GitHub Pages.
+# Required secrets: UNITY_LICENSE (content of the .ulf file), UNITY_EMAIL, UNITY_PASSWORD.
 name: WebGL
 
 on:
@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Version la plus proche disponible chez GameCI (le projet est en 2019.3.0b6).
-  UNITY_VERSION: 2019.3.0f1
+  # Must match ProjectSettings/ProjectVersion.txt (GameCI image unityci/editor:ubuntu-<version>-webgl-3).
+  UNITY_VERSION: 2023.2.8f1
 
 jobs:
   build:
@@ -34,6 +34,21 @@ jobs:
           key: Library-WebGL-${{ env.UNITY_VERSION }}-${{ hashFiles('Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
           restore-keys: Library-WebGL-${{ env.UNITY_VERSION }}-
 
+      - name: CI WebGL settings
+        run: |
+          mkdir -p Assets/Editor && cp .github/webgl/CIWebGLSettings.cs Assets/Editor/
+          # The pinned Standard Assets submodule has Editor asmdefs without platform filter, which breaks
+          # player builds (fixed upstream since): restrict every asmdef under an Editor folder to the editor.
+          find Assets -path '*/Editor/*.asmdef' -print0 | xargs -0 -r node -e '
+            const fs = require("fs");
+            for (const file of process.argv.slice(1)) {
+              const asmdef = JSON.parse(fs.readFileSync(file, "utf8").replace(/^\uFEFF/, ""));
+              if ((asmdef.includePlatforms ?? []).length) continue;
+              asmdef.includePlatforms = ["Editor"];
+              fs.writeFileSync(file, JSON.stringify(asmdef, null, 4));
+              console.log("editor only:", file);
+            }'
+
       - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -45,7 +60,7 @@ jobs:
           buildName: web
           allowDirtyBuild: true
 
-      - name: Captures d'écran
+      - name: Screenshots
         run: |
           sudo chown -R "$USER" build
           npm install --no-save --no-package-lock playwright@1.48.2
